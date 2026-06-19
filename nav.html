@@ -1,0 +1,611 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>TaskFlow – Organize your work and get more done</title>
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --purple: #7c3aed;
+    --purple-light: #ede9fe;
+    --purple-dark: #5b21b6;
+    --green: #22c55e;
+    --orange: #f97316;
+    --blue: #3b82f6;
+    --pink: #ec4899;
+    --yellow: #eab308;
+    --text: #111827;
+    --muted: #6b7280;
+    --border: #e5e7eb;
+    --bg: #ffffff;
+    --bg-soft: #f9fafb;
+  }
+
+  body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; color: var(--text); background: var(--bg); line-height: 1.6; }
+
+  a { text-decoration: none; color: inherit; }
+
+  /* ── NAV ── */
+  nav {
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 0 48px; height: 64px; border-bottom: 1px solid var(--border);
+    position: sticky; top: 0; background: #fff; z-index: 100;
+  }
+  .nav-logo { display: flex; align-items: center; gap: 8px; font-weight: 700; font-size: 18px; }
+  .nav-logo svg { width: 28px; height: 28px; }
+  .nav-links { display: flex; align-items: center; gap: 32px; font-size: 15px; color: var(--text); }
+  .nav-links a { display: flex; align-items: center; gap: 4px; }
+  .nav-links a:hover { color: var(--purple); }
+  .nav-actions { display: flex; align-items: center; gap: 16px; }
+  .btn-ghost { font-size: 15px; color: var(--text); padding: 8px 16px; border-radius: 8px; }
+  .btn-ghost:hover { background: var(--bg-soft); }
+  .btn-primary { background: var(--purple); color: #fff; padding: 10px 20px; border-radius: 8px; font-size: 15px; font-weight: 600; border: none; cursor: pointer; }
+  .btn-primary:hover { background: var(--purple-dark); }
+
+  /* ── HERO ── */
+  .hero {
+    display: grid; grid-template-columns: 1fr 1fr; gap: 48px; align-items: center;
+    max-width: 1200px; margin: 0 auto; padding: 80px 48px 60px;
+  }
+  .hero-badge {
+    display: inline-flex; align-items: center; gap: 8px;
+    background: var(--purple-light); color: var(--purple); font-size: 13px; font-weight: 600;
+    padding: 4px 12px; border-radius: 99px; margin-bottom: 20px;
+  }
+  .hero-badge .badge-new { background: var(--purple); color: #fff; padding: 2px 8px; border-radius: 99px; font-size: 11px; }
+  .hero h1 { font-size: 52px; font-weight: 800; line-height: 1.1; letter-spacing: -1px; margin-bottom: 20px; }
+  .hero p { font-size: 17px; color: var(--muted); margin-bottom: 32px; max-width: 420px; }
+  .hero-ctas { display: flex; align-items: center; gap: 16px; }
+  .btn-hero { background: var(--purple); color: #fff; padding: 14px 28px; border-radius: 10px; font-size: 16px; font-weight: 600; border: none; cursor: pointer; }
+  .btn-hero:hover { background: var(--purple-dark); }
+  .btn-demo { display: flex; align-items: center; gap: 8px; font-size: 15px; color: var(--text); font-weight: 500; }
+  .btn-demo:hover { color: var(--purple); }
+  .play-icon { width: 32px; height: 32px; background: var(--bg-soft); border-radius: 50%; display: flex; align-items: center; justify-content: center; }
+
+  /* ── TRUST ── */
+  .trust { max-width: 1200px; margin: 0 auto; padding: 0 48px 80px; }
+  .trust p { font-size: 14px; color: var(--muted); margin-bottom: 20px; }
+  .trust-logos { display: flex; align-items: center; gap: 40px; flex-wrap: wrap; }
+  .trust-logo { font-size: 18px; font-weight: 700; color: #9ca3af; display: flex; align-items: center; gap: 6px; }
+  .trust-logo.google { color: #4285f4; }
+  .trust-logo.microsoft { color: #737373; }
+  .trust-logo.airbnb { color: #ff5a5f; }
+  .trust-logo.shopify { color: #96bf48; }
+  .trust-logo.spotify { color: #1db954; }
+
+  /* ── DASHBOARD MOCKUP ── */
+  .dashboard {
+    background: #fff; border-radius: 16px; box-shadow: 0 4px 40px rgba(0,0,0,0.12);
+    overflow: hidden; font-size: 12px; border: 1px solid var(--border);
+  }
+  .dash-top { display: flex; align-items: center; justify-content: space-between; padding: 12px 16px; border-bottom: 1px solid var(--border); }
+  .dash-brand { display: flex; align-items: center; gap: 6px; font-weight: 700; font-size: 13px; color: var(--purple); }
+  .dash-title { font-size: 15px; font-weight: 700; }
+  .dash-icons { display: flex; gap: 8px; align-items: center; }
+  .dash-avatar { width: 24px; height: 24px; background: var(--purple); border-radius: 50%; }
+  .dash-body { display: grid; grid-template-columns: 140px 1fr; }
+  .dash-sidebar { border-right: 1px solid var(--border); padding: 12px 0; }
+  .dash-nav-item { padding: 7px 14px; font-size: 12px; color: var(--muted); display: flex; align-items: center; gap: 8px; cursor: pointer; }
+  .dash-nav-item.active { color: var(--purple); background: var(--purple-light); border-radius: 0; font-weight: 600; }
+  .dash-nav-item svg { width: 14px; height: 14px; opacity: 0.7; }
+  .dash-main { padding: 14px; }
+  .dash-stats { display: grid; grid-template-columns: repeat(4, 1fr); gap: 10px; margin-bottom: 14px; }
+  .stat-card { background: var(--bg-soft); border-radius: 8px; padding: 10px 12px; }
+  .stat-label { font-size: 10px; color: var(--muted); margin-bottom: 4px; }
+  .stat-val { font-size: 20px; font-weight: 800; }
+  .stat-badge { font-size: 9px; padding: 2px 6px; border-radius: 99px; display: inline-block; margin-top: 2px; }
+  .badge-a { background: #dcfce7; color: #16a34a; }
+  .dash-bottom { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
+  .chart-area { background: var(--bg-soft); border-radius: 8px; padding: 10px; }
+  .chart-header { display: flex; justify-content: space-between; font-size: 11px; font-weight: 600; margin-bottom: 8px; }
+  .chart-select { font-size: 10px; color: var(--muted); border: 1px solid var(--border); border-radius: 4px; padding: 2px 6px; background: #fff; }
+  .chart-svg { width: 100%; height: 80px; }
+  .task-list-head { display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px; }
+  .task-list-head span { font-size: 11px; font-weight: 600; }
+  .view-all { font-size: 10px; color: var(--purple); }
+  .task-item { display: flex; align-items: center; justify-content: space-between; padding: 5px 0; border-bottom: 1px solid var(--border); }
+  .task-item:last-child { border-bottom: none; }
+  .task-name { font-size: 11px; font-weight: 500; }
+  .task-sub { font-size: 10px; color: var(--muted); }
+  .tag { font-size: 9px; padding: 2px 7px; border-radius: 99px; }
+  .tag-ui { background: #ede9fe; color: var(--purple); }
+  .tag-dev { background: #dbeafe; color: #1d4ed8; }
+  .tag-content { background: #fef3c7; color: #b45309; }
+  .tag-marketing { background: #fce7f3; color: #be185d; }
+  .tag-general { background: #f3f4f6; color: var(--muted); }
+  .dash-footer { border-top: 1px solid var(--border); padding: 8px 14px; }
+  .dash-footer-items { display: flex; flex-direction: column; gap: 4px; }
+  .dash-footer-item { font-size: 11px; color: var(--muted); padding: 4px 0; display: flex; align-items: center; gap: 8px; }
+
+  /* ── FEATURES ── */
+  .features { background: var(--bg-soft); padding: 80px 48px; }
+  .section-eyebrow { text-align: center; font-size: 12px; font-weight: 700; letter-spacing: 2px; text-transform: uppercase; color: var(--purple); margin-bottom: 12px; }
+  .section-title { text-align: center; font-size: 36px; font-weight: 800; letter-spacing: -0.5px; margin-bottom: 48px; }
+  .features-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 24px; max-width: 1100px; margin: 0 auto; }
+  .feature-card { background: #fff; border-radius: 16px; padding: 28px; border: 1px solid var(--border); }
+  .feature-icon { width: 48px; height: 48px; border-radius: 12px; display: flex; align-items: center; justify-content: center; margin-bottom: 16px; font-size: 22px; }
+  .icon-purple { background: #ede9fe; }
+  .icon-green { background: #dcfce7; }
+  .icon-orange { background: #fff7ed; }
+  .icon-pink { background: #fce7f3; }
+  .icon-blue { background: #dbeafe; }
+  .icon-indigo { background: #e0e7ff; }
+  .feature-card h3 { font-size: 17px; font-weight: 700; margin-bottom: 8px; }
+  .feature-card p { font-size: 14px; color: var(--muted); line-height: 1.6; }
+
+  /* ── TESTIMONIALS ── */
+  .testimonials { padding: 80px 48px; }
+  .testimonials-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 24px; max-width: 1100px; margin: 0 auto; }
+  .testimonial-card { background: #fff; border-radius: 16px; padding: 28px; border: 1px solid var(--border); }
+  .quote-icon { color: var(--purple); font-size: 40px; line-height: 1; margin-bottom: 12px; font-family: Georgia, serif; }
+  .testimonial-card p { font-size: 15px; color: var(--text); margin-bottom: 20px; line-height: 1.6; }
+  .testimonial-author { display: flex; align-items: center; justify-content: space-between; }
+  .author-info { display: flex; align-items: center; gap: 10px; }
+  .author-avatar { width: 36px; height: 36px; border-radius: 50%; background: var(--border); display: flex; align-items: center; justify-content: center; font-size: 16px; }
+  .author-name { font-size: 14px; font-weight: 700; }
+  .author-title { font-size: 12px; color: var(--muted); }
+  .company-icon { width: 28px; height: 28px; display: flex; align-items: center; justify-content: center; font-size: 18px; }
+
+  /* ── PRICING ── */
+  .pricing { background: var(--bg-soft); padding: 80px 48px; }
+  .pricing-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 24px; max-width: 1000px; margin: 0 auto; }
+  .pricing-card { background: #fff; border-radius: 16px; padding: 32px; border: 1px solid var(--border); }
+  .pricing-card.popular { border: 2px solid var(--purple); }
+  .pricing-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 8px; }
+  .plan-name { font-size: 20px; font-weight: 800; }
+  .popular-badge { background: var(--purple); color: #fff; font-size: 11px; font-weight: 700; padding: 3px 10px; border-radius: 99px; }
+  .plan-desc { font-size: 13px; color: var(--muted); margin-bottom: 20px; }
+  .plan-price { display: flex; align-items: baseline; gap: 4px; margin-bottom: 8px; }
+  .price-big { font-size: 48px; font-weight: 800; letter-spacing: -2px; }
+  .price-period { font-size: 14px; color: var(--muted); }
+  .plan-limit { font-size: 13px; color: var(--muted); margin-bottom: 24px; }
+  .plan-features { list-style: none; margin-bottom: 28px; display: flex; flex-direction: column; gap: 10px; }
+  .plan-features li { display: flex; align-items: center; gap: 10px; font-size: 14px; }
+  .check { color: var(--purple); font-size: 16px; }
+  .btn-plan { width: 100%; padding: 13px; border-radius: 10px; font-size: 15px; font-weight: 600; cursor: pointer; text-align: center; border: 1px solid var(--border); background: #fff; color: var(--text); }
+  .btn-plan:hover { background: var(--bg-soft); }
+  .btn-plan-purple { background: var(--purple); color: #fff; border: none; }
+  .btn-plan-purple:hover { background: var(--purple-dark); }
+
+  /* ── FOOTER ── */
+  footer { background: #fff; border-top: 1px solid var(--border); padding: 60px 48px 32px; }
+  .footer-grid { display: grid; grid-template-columns: 2fr 1fr 1fr 1fr 2fr; gap: 48px; margin-bottom: 40px; }
+  .footer-brand p { font-size: 14px; color: var(--muted); margin: 12px 0 20px; max-width: 220px; line-height: 1.6; }
+  .footer-socials { display: flex; gap: 12px; }
+  .social-icon { width: 32px; height: 32px; background: var(--bg-soft); border-radius: 8px; display: flex; align-items: center; justify-content: center; font-size: 14px; color: var(--muted); }
+  .social-icon:hover { background: var(--purple-light); color: var(--purple); }
+  .footer-col h4 { font-size: 14px; font-weight: 700; margin-bottom: 16px; }
+  .footer-col a { display: block; font-size: 14px; color: var(--muted); margin-bottom: 10px; }
+  .footer-col a:hover { color: var(--purple); }
+  .footer-newsletter h4 { font-size: 14px; font-weight: 700; margin-bottom: 8px; }
+  .footer-newsletter p { font-size: 13px; color: var(--muted); margin-bottom: 14px; }
+  .newsletter-form { display: flex; gap: 8px; }
+  .newsletter-input { flex: 1; padding: 10px 14px; border: 1px solid var(--border); border-radius: 8px; font-size: 14px; outline: none; }
+  .newsletter-input:focus { border-color: var(--purple); }
+  .footer-bottom { border-top: 1px solid var(--border); padding-top: 20px; text-align: center; font-size: 13px; color: var(--muted); }
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav>
+  <div class="nav-logo">
+    <svg viewBox="0 0 28 28" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <rect width="28" height="28" rx="7" fill="#7c3aed"/>
+      <path d="M8 14l4 4 8-8" stroke="#fff" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
+    </svg>
+    TaskFlow
+  </div>
+  <div class="nav-links">
+    <a href="#">Features</a>
+    <a href="#">Pricing</a>
+    <a href="#">Resources ▾</a>
+    <a href="#">Company ▾</a>
+  </div>
+  <div class="nav-actions">
+    <a href="#" class="btn-ghost">Log in</a>
+    <button class="btn-primary">Sign up free</button>
+  </div>
+</nav>
+
+<!-- HERO -->
+<section>
+  <div class="hero">
+    <div class="hero-left">
+      <div class="hero-badge">
+        <span class="badge-new">NEW</span>
+        TaskFlow 2.0 is here &nbsp;›
+      </div>
+      <h1>Organize your work and get more done</h1>
+      <p>TaskFlow helps teams of all sizes track work, manage projects, and collaborate in one place.</p>
+      <div class="hero-ctas">
+        <button class="btn-hero">Get started for free</button>
+        <a href="#" class="btn-demo">
+          <div class="play-icon">
+            <svg width="10" height="12" viewBox="0 0 10 12" fill="none"><path d="M1 1l8 5-8 5V1z" fill="#374151"/></svg>
+          </div>
+          Watch demo
+        </a>
+      </div>
+    </div>
+
+    <!-- Dashboard mockup -->
+    <div class="dashboard">
+      <div class="dash-top">
+        <div class="dash-brand">
+          <svg width="16" height="16" viewBox="0 0 28 28" fill="none"><rect width="28" height="28" rx="7" fill="#7c3aed"/><path d="M8 14l4 4 8-8" stroke="#fff" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          TaskFlow
+        </div>
+        <div class="dash-title">Dashboard</div>
+        <div class="dash-icons">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#9ca3af" stroke-width="2"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9M13.73 21a2 2 0 0 1-3.46 0"/></svg>
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#9ca3af" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M3 9h18M9 21V9"/></svg>
+          <div class="dash-avatar"></div>
+        </div>
+      </div>
+      <div class="dash-body">
+        <div class="dash-sidebar">
+          <div class="dash-nav-item active">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/></svg>
+            Dashboard
+          </div>
+          <div class="dash-nav-item">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 19a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5l2 3h9a2 2 0 0 1 2 2z"/></svg>
+            Projects
+          </div>
+          <div class="dash-nav-item">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 11l3 3L22 4"/><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"/></svg>
+            Tasks
+          </div>
+          <div class="dash-nav-item">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="18" rx="2"/><path d="M16 2v4M8 2v4M3 10h18"/></svg>
+            Calendar
+          </div>
+          <div class="dash-nav-item">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87M16 3.13a4 4 0 0 1 0 7.75"/></svg>
+            Team
+          </div>
+          <div class="dash-nav-item">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"/><path d="M12 1v2M12 21v2M4.22 4.22l1.42 1.42M18.36 18.36l1.42 1.42M1 12h2M21 12h2M4.22 19.78l1.42-1.42M18.36 5.64l1.42-1.42"/></svg>
+            Settings
+          </div>
+          <div style="margin-top:auto; padding-top:20px;">
+            <div class="dash-nav-item">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M12 8v4M12 16h.01"/></svg>
+              Help
+            </div>
+            <div class="dash-nav-item">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4M16 17l5-5-5-5M21 12H9"/></svg>
+              Log out
+            </div>
+          </div>
+        </div>
+        <div class="dash-main">
+          <div class="dash-stats">
+            <div class="stat-card">
+              <div class="stat-label">Total Projects</div>
+              <div class="stat-val">24</div>
+              <div class="stat-badge badge-a">▲</div>
+            </div>
+            <div class="stat-card">
+              <div class="stat-label">Tasks Completed</div>
+              <div class="stat-val">168</div>
+              <div class="stat-badge badge-a">▲</div>
+            </div>
+            <div class="stat-card">
+              <div class="stat-label">In Progress</div>
+              <div class="stat-val">32</div>
+              <div class="stat-badge" style="background:#fef3c7;color:#b45309;">▲</div>
+            </div>
+            <div class="stat-card">
+              <div class="stat-label">Team Members</div>
+              <div class="stat-val">12</div>
+              <div class="stat-badge badge-a">▲</div>
+            </div>
+          </div>
+          <div class="dash-bottom">
+            <div class="chart-area">
+              <div class="chart-header">
+                <span>Projects Overview</span>
+                <select class="chart-select"><option>This month</option></select>
+              </div>
+              <svg class="chart-svg" viewBox="0 0 200 80" preserveAspectRatio="none">
+                <defs>
+                  <linearGradient id="chartGrad" x1="0" y1="0" x2="0" y2="1">
+                    <stop offset="0%" stop-color="#7c3aed" stop-opacity="0.2"/>
+                    <stop offset="100%" stop-color="#7c3aed" stop-opacity="0"/>
+                  </linearGradient>
+                </defs>
+                <path d="M0 70 C20 65, 40 50, 60 45 C80 40, 100 55, 120 35 C140 15, 160 25, 200 20" fill="none" stroke="#7c3aed" stroke-width="2"/>
+                <path d="M0 70 C20 65, 40 50, 60 45 C80 40, 100 55, 120 35 C140 15, 160 25, 200 20 L200 80 L0 80Z" fill="url(#chartGrad)"/>
+                <line x1="0" y1="75" x2="200" y2="75" stroke="#e5e7eb" stroke-width="0.5"/>
+                <text x="0" y="79" fill="#9ca3af" font-size="7">May 1</text>
+                <text x="40" y="79" fill="#9ca3af" font-size="7">May 8</text>
+                <text x="83" y="79" fill="#9ca3af" font-size="7">May 15</text>
+                <text x="125" y="79" fill="#9ca3af" font-size="7">May 22</text>
+                <text x="165" y="79" fill="#9ca3af" font-size="7">May 29</text>
+              </svg>
+            </div>
+            <div>
+              <div class="task-list-head">
+                <span>Recent Tasks</span>
+                <a href="#" class="view-all">View all tasks</a>
+              </div>
+              <div class="task-item">
+                <div>
+                  <div class="task-name">Design landing page</div>
+                  <div class="task-sub">Github</div>
+                </div>
+                <span class="tag tag-ui">UI/UX</span>
+              </div>
+              <div class="task-item">
+                <div>
+                  <div class="task-name">Fix login bug</div>
+                  <div class="task-sub">Kannan</div>
+                </div>
+                <span class="tag tag-dev">Development</span>
+              </div>
+              <div class="task-item">
+                <div>
+                  <div class="task-name">Write documentation</div>
+                  <div class="task-sub">General</div>
+                </div>
+                <span class="tag tag-content">Content</span>
+              </div>
+              <div class="task-item">
+                <div>
+                  <div class="task-name">Setup analytics</div>
+                  <div class="task-sub">Kannan</div>
+                </div>
+                <span class="tag tag-marketing">Marketing</span>
+              </div>
+              <div class="task-item">
+                <div>
+                  <div class="task-name">Team meeting</div>
+                  <div class="task-sub">General</div>
+                </div>
+                <span class="tag tag-general">General</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Trust -->
+  <div class="trust">
+    <p>Trusted by 10,000+ teams worldwide</p>
+    <div class="trust-logos">
+      <div class="trust-logo google">
+        <svg width="18" height="18" viewBox="0 0 24 24"><path d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z" fill="#4285F4"/><path d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z" fill="#34A853"/><path d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z" fill="#FBBC05"/><path d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z" fill="#EA4335"/></svg>
+        Google
+      </div>
+      <div class="trust-logo microsoft">
+        <svg width="18" height="18" viewBox="0 0 24 24"><path d="M0 0h11.5v11.5H0z" fill="#f25022"/><path d="M12.5 0H24v11.5H12.5z" fill="#7fba00"/><path d="M0 12.5h11.5V24H0z" fill="#00a4ef"/><path d="M12.5 12.5H24V24H12.5z" fill="#ffb900"/></svg>
+        Microsoft
+      </div>
+      <div class="trust-logo airbnb">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="#ff5a5f"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.41 0-8-3.59-8-8s3.59-8 8-8 8 3.59 8 8-3.59 8-8 8z"/><circle cx="12" cy="12" r="4"/></svg>
+        airbnb
+      </div>
+      <div class="trust-logo shopify">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="#96bf48"><path d="M15.5 3.5c-.1-.6-.6-1-1.2-1-.1 0-2.7.1-2.7.1-.1 0-1.5-1.5-1.7-1.6H3.5L2 20.5l12 2.5 8-2-.5-12-6-5.5z"/></svg>
+        🛍 Shopify
+      </div>
+      <div class="trust-logo spotify">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="#1db954"><circle cx="12" cy="12" r="10"/><path d="M8 14.5c2.5-1 5.5-1 8 0M7 11c3-1.5 7-1.5 10 0M8.5 7.5c2.5-1 5.5-1 8 0" stroke="#fff" stroke-width="1.5" stroke-linecap="round" fill="none"/></svg>
+        Spotify
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- FEATURES -->
+<section class="features">
+  <div class="section-eyebrow">FEATURES</div>
+  <h2 class="section-title">Everything you need to ship your best work</h2>
+  <div class="features-grid">
+    <div class="feature-card">
+      <div class="feature-icon icon-purple">📋</div>
+      <h3>Project Management</h3>
+      <p>Plan, track, and manage your projects with ease from start to finish.</p>
+    </div>
+    <div class="feature-card">
+      <div class="feature-icon icon-green">👥</div>
+      <h3>Team Collaboration</h3>
+      <p>Collaborate in real-time with your team and get things done faster.</p>
+    </div>
+    <div class="feature-card">
+      <div class="feature-icon icon-orange">📅</div>
+      <h3>Smart Calendar</h3>
+      <p>Schedule tasks, set deadlines, and never miss an important date.</p>
+    </div>
+    <div class="feature-card">
+      <div class="feature-icon icon-pink">📊</div>
+      <h3>Progress Tracking</h3>
+      <p>Visualize progress and keep everyone on the same page.</p>
+    </div>
+    <div class="feature-card">
+      <div class="feature-icon icon-blue">🔔</div>
+      <h3>Custom Notifications</h3>
+      <p>Get notified about important updates and never miss a beat.</p>
+    </div>
+    <div class="feature-card">
+      <div class="feature-icon icon-indigo">🛡️</div>
+      <h3>Secure &amp; Reliable</h3>
+      <p>Your data is safe with enterprise-grade security and reliability.</p>
+    </div>
+  </div>
+</section>
+
+<!-- TESTIMONIALS -->
+<section class="testimonials">
+  <div class="section-eyebrow">TESTIMONIALS</div>
+  <h2 class="section-title">Loved by teams worldwide</h2>
+  <div class="testimonials-grid">
+    <div class="testimonial-card">
+      <div class="quote-icon">"</div>
+      <p>TaskFlow has completely transformed the way our team works. We're more productive than ever!</p>
+      <div class="testimonial-author">
+        <div class="author-info">
+          <div class="author-avatar">👩</div>
+          <div>
+            <div class="author-name">Sarah Johnson</div>
+            <div class="author-title">Product Manager at Google</div>
+          </div>
+        </div>
+        <div class="company-icon">
+          <svg width="22" height="22" viewBox="0 0 24 24"><path d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z" fill="#4285F4"/><path d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z" fill="#34A853"/><path d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z" fill="#FBBC05"/><path d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z" fill="#EA4335"/></svg>
+        </div>
+      </div>
+    </div>
+    <div class="testimonial-card">
+      <div class="quote-icon">"</div>
+      <p>The best project management tool we've ever used. Simple, powerful, and intuitive.</p>
+      <div class="testimonial-author">
+        <div class="author-info">
+          <div class="author-avatar">👨</div>
+          <div>
+            <div class="author-name">Mike Chen</div>
+            <div class="author-title">CTO at Airbnb</div>
+          </div>
+        </div>
+        <div class="company-icon" style="color:#ff5a5f; font-size:22px;">⬡</div>
+      </div>
+    </div>
+    <div class="testimonial-card">
+      <div class="quote-icon">"</div>
+      <p>TaskFlow helps us stay organized and deliver projects on time, every time.</p>
+      <div class="testimonial-author">
+        <div class="author-info">
+          <div class="author-avatar">👩</div>
+          <div>
+            <div class="author-name">Emily Davis</div>
+            <div class="author-title">Team Lead at Spotify</div>
+          </div>
+        </div>
+        <div class="company-icon" style="color:#1db954; font-size:22px;">●</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- PRICING -->
+<section class="pricing">
+  <div class="section-eyebrow">PRICING</div>
+  <h2 class="section-title">Choose the perfect plan for your team</h2>
+  <div class="pricing-grid">
+    <!-- Basic -->
+    <div class="pricing-card">
+      <div class="pricing-header">
+        <div class="plan-name">Basic</div>
+      </div>
+      <div class="plan-desc">Perfect for small teams getting started.</div>
+      <div class="plan-price">
+        <span class="price-big">$0</span>
+        <span class="price-period">/month</span>
+      </div>
+      <div class="plan-limit">Up to 5 users</div>
+      <ul class="plan-features">
+        <li><span class="check">✓</span> 5 Projects</li>
+        <li><span class="check">✓</span> Basic Features</li>
+        <li><span class="check">✓</span> Email Support</li>
+      </ul>
+      <button class="btn-plan">Get started</button>
+    </div>
+    <!-- Pro -->
+    <div class="pricing-card popular">
+      <div class="pricing-header">
+        <div class="plan-name">Pro</div>
+        <span class="popular-badge">POPULAR</span>
+      </div>
+      <div class="plan-desc">Best for growing teams and professionals.</div>
+      <div class="plan-price">
+        <span class="price-big">$9</span>
+        <span class="price-period">/user/month</span>
+      </div>
+      <div class="plan-limit">Up to 50 users</div>
+      <ul class="plan-features">
+        <li><span class="check">✓</span> Unlimited Projects</li>
+        <li><span class="check">✓</span> Advanced Features</li>
+        <li><span class="check">✓</span> Priority Support</li>
+      </ul>
+      <button class="btn-plan btn-plan-purple">Start free trial</button>
+    </div>
+    <!-- Enterprise -->
+    <div class="pricing-card">
+      <div class="pricing-header">
+        <div class="plan-name">Enterprise</div>
+      </div>
+      <div class="plan-desc">For large teams with advanced needs.</div>
+      <div class="plan-price">
+        <span class="price-big" style="font-size:36px;">Custom</span>
+      </div>
+      <div class="plan-limit">Unlimited users</div>
+      <ul class="plan-features">
+        <li><span class="check">✓</span> Everything in Pro</li>
+        <li><span class="check">✓</span> Custom Integrations</li>
+        <li><span class="check">✓</span> Dedicated Support</li>
+      </ul>
+      <button class="btn-plan">Contact sales</button>
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <div class="footer-grid">
+    <div class="footer-brand">
+      <div class="nav-logo">
+        <svg viewBox="0 0 28 28" fill="none" xmlns="http://www.w3.org/2000/svg" width="28" height="28">
+          <rect width="28" height="28" rx="7" fill="#7c3aed"/>
+          <path d="M8 14l4 4 8-8" stroke="#fff" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+        TaskFlow
+      </div>
+      <p>TaskFlow helps teams organize, track, and manage their work more efficiently.</p>
+      <div class="footer-socials">
+        <a href="#" class="social-icon">𝕏</a>
+        <a href="#" class="social-icon">in</a>
+        <a href="#" class="social-icon">f</a>
+        <a href="#" class="social-icon">⌥</a>
+      </div>
+    </div>
+    <div class="footer-col">
+      <h4>Product</h4>
+      <a href="#">Features</a>
+      <a href="#">Pricing</a>
+      <a href="#">Integrations</a>
+      <a href="#">Changelog</a>
+    </div>
+    <div class="footer-col">
+      <h4>Resources</h4>
+      <a href="#">Documentation</a>
+      <a href="#">Blog</a>
+      <a href="#">Help Center</a>
+      <a href="#">Templates</a>
+    </div>
+    <div class="footer-col">
+      <h4>Company</h4>
+      <a href="#">About Us</a>
+      <a href="#">Careers</a>
+      <a href="#">Privacy Policy</a>
+      <a href="#">Terms of Service</a>
+    </div>
+    <div class="footer-newsletter">
+      <h4>Newsletter</h4>
+      <p>Get the latest updates and tips delivered to your inbox.</p>
+      <div class="newsletter-form">
+        <input class="newsletter-input" type="email" placeholder="Enter your email" />
+        <button class="btn-primary">Subscribe</button>
+      </div>
+    </div>
+  </div>
+  <div class="footer-bottom">© 2024 TaskFlow. All rights reserved.</div>
+</footer>
+
+</body>
+</html>

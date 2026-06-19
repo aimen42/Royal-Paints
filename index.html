@@ -1,0 +1,792 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Royal Paints — Premium Paint Store in Vaishali, Ghaziabad</title>
+  <meta name="description" content="Royal Paints in Vaishali, Ghaziabad — premium paints, expert color consultation, and fast delivery. Asian Paints, Berger, Dulux, Nerolac. Call 099712 98772." />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;0,900;1,400&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet" />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --black: #0a0a0a;
+      --off-white: #f5f3ee;
+      --cream: #ede8df;
+      --accent: #1F4EAD;
+      --accent-light: #3a6fd8;
+      --gold: #c9a84c;
+      --text: #1a1a1a;
+      --muted: #6b6b6b;
+      --border: #d4cfc6;
+    }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      font-family: 'Inter', sans-serif;
+      background: var(--off-white);
+      color: var(--text);
+      overflow-x: hidden;
+    }
+
+    /* ── NAV ── */
+    nav {
+      position: fixed;
+      top: 0; left: 0; right: 0;
+      z-index: 100;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 18px 48px;
+      background: rgba(245, 243, 238, 0.92);
+      backdrop-filter: blur(12px);
+      border-bottom: 1px solid var(--border);
+    }
+
+    .nav-logo {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.25rem;
+      font-weight: 700;
+      letter-spacing: 0.08em;
+      color: var(--black);
+      text-transform: uppercase;
+    }
+
+    .nav-links {
+      display: flex;
+      gap: 36px;
+      list-style: none;
+    }
+
+    .nav-links a {
+      font-size: 0.78rem;
+      font-weight: 500;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--text);
+      text-decoration: none;
+      transition: color 0.2s;
+    }
+
+    .nav-links a:hover { color: var(--accent); }
+
+    .nav-right {
+      display: flex;
+      align-items: center;
+      gap: 20px;
+    }
+
+    .nav-location {
+      font-size: 0.72rem;
+      color: var(--muted);
+      letter-spacing: 0.05em;
+    }
+
+    .btn-call {
+      background: var(--black);
+      color: #fff;
+      font-size: 0.75rem;
+      font-weight: 600;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      padding: 10px 22px;
+      text-decoration: none;
+      transition: background 0.2s;
+    }
+
+    .btn-call:hover { background: var(--accent); }
+
+    /* ── HERO ── */
+    .hero {
+      min-height: 100vh;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      padding-top: 76px;
+    }
+
+    .hero-left {
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      padding: 80px 64px 80px 80px;
+    }
+
+    .hero-rating {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      margin-bottom: 40px;
+    }
+
+    .stars { color: var(--gold); font-size: 1rem; letter-spacing: 2px; }
+
+    .rating-text {
+      font-size: 0.75rem;
+      font-weight: 500;
+      color: var(--muted);
+      letter-spacing: 0.06em;
+    }
+
+    .hero-headline {
+      font-family: 'Playfair Display', serif;
+      font-size: clamp(3.2rem, 6vw, 5.5rem);
+      font-weight: 900;
+      line-height: 1.0;
+      letter-spacing: -0.02em;
+      color: var(--black);
+      margin-bottom: 28px;
+    }
+
+    .hero-headline em {
+      font-style: italic;
+      color: var(--accent);
+    }
+
+    .hero-headline span.art { text-transform: uppercase; }
+
+    .hero-sub {
+      font-size: 1rem;
+      color: var(--muted);
+      line-height: 1.7;
+      max-width: 440px;
+      margin-bottom: 48px;
+    }
+
+    .hero-address {
+      display: flex;
+      align-items: flex-start;
+      gap: 14px;
+      padding: 22px 24px;
+      background: var(--cream);
+      border-left: 3px solid var(--accent);
+    }
+
+    .address-label {
+      font-size: 0.65rem;
+      font-weight: 700;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      color: var(--accent);
+      margin-bottom: 4px;
+    }
+
+    .address-text {
+      font-size: 0.85rem;
+      color: var(--text);
+      line-height: 1.5;
+    }
+
+    .hero-right {
+      position: relative;
+      overflow: hidden;
+    }
+
+    .hero-right img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
+    }
+
+    .hero-brands {
+      position: absolute;
+      bottom: 0; left: 0; right: 0;
+      background: rgba(10,10,10,0.82);
+      backdrop-filter: blur(6px);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 36px;
+      padding: 18px 32px;
+    }
+
+    .brand-tag {
+      font-size: 0.65rem;
+      font-weight: 700;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: rgba(255,255,255,0.65);
+    }
+
+    /* ── SERVICES ── */
+    #services {
+      padding: 120px 80px;
+      background: var(--black);
+      color: #fff;
+    }
+
+    .section-eyebrow {
+      font-size: 0.68rem;
+      font-weight: 700;
+      letter-spacing: 0.22em;
+      text-transform: uppercase;
+      color: var(--accent-light);
+      margin-bottom: 60px;
+    }
+
+    .services-header {
+      display: flex;
+      align-items: flex-end;
+      justify-content: space-between;
+      margin-bottom: 72px;
+    }
+
+    .services-title {
+      font-family: 'Playfair Display', serif;
+      font-size: clamp(2rem, 3.5vw, 3rem);
+      font-weight: 700;
+      color: #fff;
+    }
+
+    .services-label {
+      font-size: 0.72rem;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: rgba(255,255,255,0.35);
+    }
+
+    .services-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 1px;
+      background: rgba(255,255,255,0.1);
+    }
+
+    .service-card {
+      background: var(--black);
+      padding: 48px 40px;
+      transition: background 0.25s;
+    }
+
+    .service-card:hover { background: #111; }
+
+    .service-num {
+      font-size: 0.65rem;
+      font-weight: 700;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: var(--accent-light);
+      margin-bottom: 24px;
+    }
+
+    .service-name {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.5rem;
+      font-weight: 700;
+      color: #fff;
+      margin-bottom: 18px;
+    }
+
+    .service-desc {
+      font-size: 0.88rem;
+      line-height: 1.7;
+      color: rgba(255,255,255,0.5);
+    }
+
+    /* ── GALLERY ── */
+    #gallery {
+      padding: 120px 80px;
+    }
+
+    .gallery-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      grid-template-rows: 520px 360px;
+      gap: 16px;
+    }
+
+    .gallery-main {
+      grid-row: span 2;
+      overflow: hidden;
+    }
+
+    .gallery-main img, .gallery-thumb img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
+      transition: transform 0.5s ease;
+    }
+
+    .gallery-main:hover img, .gallery-thumb:hover img { transform: scale(1.03); }
+
+    .gallery-thumb { overflow: hidden; }
+
+    /* ── COLOR PICKER ── */
+    .color-section {
+      padding: 120px 80px;
+      background: var(--cream);
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 80px;
+      align-items: center;
+    }
+
+    .color-left h2 {
+      font-family: 'Playfair Display', serif;
+      font-size: clamp(2.2rem, 3.5vw, 3.2rem);
+      font-weight: 900;
+      line-height: 1.1;
+      color: var(--black);
+      margin-bottom: 24px;
+    }
+
+    .color-left p {
+      font-size: 0.95rem;
+      line-height: 1.75;
+      color: var(--muted);
+    }
+
+    .color-wheel-wrapper {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 28px;
+    }
+
+    .color-wheel-ring {
+      width: 280px;
+      height: 280px;
+      border-radius: 50%;
+      background: conic-gradient(
+        hsl(0,90%,55%),
+        hsl(30,90%,55%),
+        hsl(60,90%,55%),
+        hsl(90,90%,55%),
+        hsl(120,90%,45%),
+        hsl(150,90%,45%),
+        hsl(180,80%,45%),
+        hsl(210,90%,55%),
+        hsl(240,80%,55%),
+        hsl(270,80%,55%),
+        hsl(300,80%,55%),
+        hsl(330,80%,55%),
+        hsl(360,90%,55%)
+      );
+      position: relative;
+      cursor: crosshair;
+      box-shadow: 0 8px 48px rgba(0,0,0,0.18);
+    }
+
+    .color-wheel-ring::after {
+      content: '';
+      position: absolute;
+      inset: 48px;
+      border-radius: 50%;
+      background: var(--cream);
+    }
+
+    .color-chip {
+      display: flex;
+      align-items: center;
+      gap: 18px;
+    }
+
+    .chip-swatch {
+      width: 52px;
+      height: 52px;
+      border-radius: 4px;
+      background: var(--accent);
+      transition: background 0.3s;
+    }
+
+    .chip-info { font-size: 0.82rem; color: var(--muted); }
+    .chip-hex { font-family: 'Inter', monospace; font-weight: 700; font-size: 1.1rem; color: var(--text); }
+
+    /* ── CONTACT ── */
+    #contact {
+      padding: 120px 80px;
+      background: var(--black);
+      color: #fff;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 80px;
+      align-items: start;
+    }
+
+    .contact-left h2 {
+      font-family: 'Playfair Display', serif;
+      font-size: clamp(2rem, 3vw, 2.8rem);
+      font-weight: 700;
+      color: #fff;
+      margin-bottom: 40px;
+    }
+
+    .contact-block {
+      margin-bottom: 36px;
+    }
+
+    .contact-label {
+      font-size: 0.65rem;
+      font-weight: 700;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: var(--accent-light);
+      margin-bottom: 10px;
+    }
+
+    .contact-value {
+      font-size: 1rem;
+      line-height: 1.6;
+      color: rgba(255,255,255,0.75);
+    }
+
+    .contact-value a {
+      color: rgba(255,255,255,0.75);
+      text-decoration: none;
+    }
+
+    .contact-value a:hover { color: #fff; }
+
+    .hours-row {
+      display: flex;
+      justify-content: space-between;
+      padding: 10px 0;
+      border-bottom: 1px solid rgba(255,255,255,0.08);
+      font-size: 0.85rem;
+      color: rgba(255,255,255,0.55);
+    }
+
+    .hours-row .open { color: #5dca7f; }
+
+    .contact-right {
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+    }
+
+    .map-placeholder {
+      width: 100%;
+      height: 320px;
+      background: #1a1a1a;
+      border: 1px solid rgba(255,255,255,0.1);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .map-placeholder iframe {
+      width: 100%; height: 100%; border: none; filter: grayscale(0.4) invert(0.85) hue-rotate(180deg);
+    }
+
+    .btn-directions {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      background: transparent;
+      border: 1px solid rgba(255,255,255,0.25);
+      color: rgba(255,255,255,0.75);
+      font-size: 0.78rem;
+      font-weight: 600;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      padding: 14px 24px;
+      text-decoration: none;
+      transition: all 0.2s;
+    }
+
+    .btn-directions:hover { background: var(--accent); border-color: var(--accent); color: #fff; }
+
+    /* ── FOOTER ── */
+    footer {
+      background: #050505;
+      padding: 32px 80px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      border-top: 1px solid rgba(255,255,255,0.06);
+    }
+
+    .footer-copy {
+      font-size: 0.72rem;
+      color: rgba(255,255,255,0.3);
+      letter-spacing: 0.04em;
+    }
+
+    .footer-links {
+      display: flex;
+      gap: 32px;
+      list-style: none;
+    }
+
+    .footer-links a {
+      font-size: 0.7rem;
+      font-weight: 500;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: rgba(255,255,255,0.3);
+      text-decoration: none;
+      transition: color 0.2s;
+    }
+
+    .footer-links a:hover { color: rgba(255,255,255,0.7); }
+
+    /* ── RESPONSIVE ── */
+    @media (max-width: 900px) {
+      nav { padding: 16px 24px; }
+      .nav-links { display: none; }
+      .nav-location { display: none; }
+
+      .hero { grid-template-columns: 1fr; min-height: auto; }
+      .hero-left { padding: 48px 24px; }
+      .hero-right { height: 320px; }
+
+      #services { padding: 72px 24px; }
+      .services-grid { grid-template-columns: 1fr; }
+      .services-header { flex-direction: column; align-items: flex-start; gap: 8px; }
+
+      #gallery { padding: 72px 24px; }
+      .gallery-grid { grid-template-columns: 1fr; grid-template-rows: auto; }
+      .gallery-main { grid-row: span 1; height: 300px; }
+      .gallery-thumb { height: 220px; }
+
+      .color-section { grid-template-columns: 1fr; padding: 72px 24px; gap: 48px; }
+
+      #contact { grid-template-columns: 1fr; padding: 72px 24px; gap: 48px; }
+
+      footer { flex-direction: column; gap: 16px; padding: 24px; text-align: center; }
+    }
+    h3{
+      font-family: 'Playfair Display', serif;
+
+    }
+  </style>
+</head>
+<body>
+
+<!-- ── NAV ── -->
+<nav>
+  <div class="nav-logo">Royal Paints</div>
+  <ul class="nav-links">
+    <li><a href="#services">Services</a></li>
+    <li><a href="#gallery">Gallery</a></li>
+    <li><a href="#contact">Visit</a></li>
+  </ul>
+  <div class="nav-right">
+    <span class="nav-location">Vaishali, Ghaziabad &nbsp;·&nbsp; Open until 8:00 PM</span>
+    <a class="btn-call" href="tel:09971298772">Call Now</a>
+  </div>
+</nav>
+
+<!-- ── HERO ── -->
+<section class="hero">
+  <div class="hero-left">
+    <div class="hero-rating">
+      <span class="stars">★★★★★</span>
+      <span class="rating-text">4.8 Rating &nbsp;/&nbsp; 890 Google Reviews</span>
+    </div>
+
+    <h1 class="hero-headline">
+      THE <em>art</em><br>
+      <span class="art">OF SURFACE</span>
+    </h1>
+
+    <p class="hero-sub">
+      Premium paints and expert color consultation in the heart of Ghaziabad.
+      From fresh pigments to professional finishings — Vaishali's trusted destination since day one.
+    </p>
+    <h3>With Trust of Over 20+ years</h3>
+
+    <div class="hero-address">
+      <div>
+        <div class="address-label">The Destination</div>
+        <div class="address-text">Shop No.3A/25, Opp. Chaya Public School, Vaishali</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="hero-right">
+    <img
+      src="https://royalpaints.lovable.app/assets/hero-paint-GdsQw3n-.jpg"
+      alt="Freshly mixed paint in an open can"
+      onerror="this.style.background='linear-gradient(135deg,#1F4EAD 0%,#c9a84c 100%)';this.removeAttribute('src')"
+    />
+    <div class="hero-brands">
+      <span class="brand-tag">Asian Paints</span>
+      <span class="brand-tag">Berger</span>
+      <span class="brand-tag">Dulux</span>
+      <span class="brand-tag">Nerolac</span>
+      <span class="brand-tag">Nippon</span>
+    </div>
+  </div>
+</section>
+
+<!-- ── SERVICES ── -->
+<section id="services">
+  <div class="section-eyebrow">Our Services</div>
+  <div class="services-header">
+    <h2 class="services-title">Expertise</h2>
+    <span class="services-label">(01—03)</span>
+  </div>
+  <div class="services-grid">
+    <div class="service-card">
+      <div class="service-num">01</div>
+      <div class="service-name">Color Consultation</div>
+      <p class="service-desc">Bringing your vision to life with professional color mapping and curated swatches.</p>
+    </div>
+    <div class="service-card">
+      <div class="service-num">02</div>
+      <div class="service-name">Fast Delivery</div>
+      <p class="service-desc">Same-day dispatch for all major brands across Vaishali and the wider Ghaziabad area.</p>
+    </div>
+    <div class="service-card">
+      <div class="service-num">03</div>
+      <div class="service-name">Contractor Tie-up</div>
+      <p class="service-desc">Wholesale pricing and dedicated support for professional painters and architects.</p>
+    </div>
+  </div>
+</section>
+
+<!-- ── GALLERY ── -->
+<section id="gallery">
+  <div class="section-eyebrow" style="margin-bottom:40px;">Finishes</div>
+  <div class="gallery-grid">
+    <div class="gallery-main">
+      <img
+        src="https://royalpaints.lovable.app/assets/finish-matte-D2M4fE_w.jpg"
+        alt="Matte deep forest green interior wall finish"
+        onerror="this.style.background='#2a4a3a';this.removeAttribute('src')"
+      />
+    </div>
+    <div class="gallery-thumb">
+      <img
+        src="https://royalpaints.lovable.app/assets/finish-gloss-CsJoF4FB.jpg"
+        alt="High gloss red lacquer paint finish"
+        onerror="this.style.background='#8a1a1a';this.removeAttribute('src')"
+      />
+    </div>
+    <div class="gallery-thumb">
+      <img
+        src="https://royalpaints.lovable.app/assets/finish-textured-B41bE3mF.jpg"
+        alt="Textured exterior wall paint in sandstone beige"
+        onerror="this.style.background='#c4a87a';this.removeAttribute('src')"
+      />
+    </div>
+  </div>
+</section>
+
+<!-- ── COLOR PICKER ── -->
+<section class="color-section">
+  <div class="color-left">
+    <div class="section-eyebrow" style="color:var(--accent);">15,000+ Shades</div>
+    <h2>Choose from over 15,000<br>colour combinations.</h2>
+    <p>Spin the wheel to explore a shade — then visit our Vaishali showroom to test it on real samples.</p>
+  </div>
+  <div class="color-wheel-wrapper">
+    <div class="color-wheel-ring" id="colorWheel" title="Click to pick a shade"></div>
+    <div class="color-chip">
+      <div class="chip-swatch" id="chipSwatch"></div>
+      <div>
+        <div class="chip-info">Selected Shade</div>
+        <div class="chip-hex" id="chipHex">#1F4EAD</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ── CONTACT ── -->
+<section id="contact">
+  <div class="contact-left">
+    <h2>Find Us</h2>
+
+    <div class="contact-block">
+      <div class="contact-label">Address</div>
+      <div class="contact-value">
+        Shop No.3A/25, Opp. Chaya Public School,<br>
+        Vaishali, Ghaziabad,UP<br>
+        Uttar Pradesh 201010
+      </div>
+    </div>
+
+    <div class="contact-block">
+      <div class="contact-label">Call Us</div>
+      <div class="contact-value"><a href="tel:09971298772">099712 98772</a></div>
+    </div>
+
+    <div class="contact-block">
+      <div class="contact-label">Hours</div>
+      <div class="contact-value">
+        <div class="hours-row"><span>Monday – Sunday</span><span class="open">9:00 AM – 8:00 PM</span></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="contact-right">
+    <div class="map-placeholder">
+      <iframe
+        title="Royal Paints location"
+        src="https://www.google.com/maps?q=Royal+Paints+Vaishali+Ghaziabad+Uttar+Pradesh&output=embed"
+        allowfullscreen
+        loading="lazy"
+      ></iframe>
+    </div>
+    <a
+      class="btn-directions"
+      href="https://www.google.com/maps/search/?api=1&query=Royal+Paints+Vaishali+Ghaziabad"
+      target="_blank"
+      rel="noopener"
+    >
+      Directions &nbsp; Open in Google Maps →
+    </a>
+  </div>
+</section>
+
+<!-- ── FOOTER ── -->
+<footer>
+  <span class="footer-copy">© 2026 Royal Paints Ghaziabad. All Rights Reserved.</span>
+  <ul class="footer-links">
+    <li><a href="#services">Services</a></li>
+    <li><a href="#gallery">Gallery</a></li>
+    <li><a href="#contact">Visit</a></li>
+  </ul>
+</footer>
+
+<script>
+  // Simple color-wheel interaction
+  const hues = [0,20,40,60,90,120,150,180,210,240,270,300,330];
+  const sats = [90,80,75];
+
+  const wheel = document.getElementById('colorWheel');
+  const swatch = document.getElementById('chipSwatch');
+  const hex = document.getElementById('chipHex');
+
+  function hslToHex(h, s, l) {
+    s /= 100; l /= 100;
+    const a = s * Math.min(l, 1 - l);
+    const f = n => {
+      const k = (n + h / 30) % 12;
+      const color = l - a * Math.max(Math.min(k - 3, 9 - k, 1), -1);
+      return Math.round(255 * color).toString(16).padStart(2, '0');
+    };
+    return `#${f(0)}${f(8)}${f(4)}`;
+  }
+
+  let idx = 0;
+  const palette = hues.flatMap(h => sats.map(s => hslToHex(h, s, 48)));
+
+  // Initialise with accent colour
+  swatch.style.background = '#1F4EAD';
+
+  wheel.addEventListener('click', () => {
+    idx = (idx + 1) % palette.length;
+    const color = palette[idx];
+    swatch.style.background = color;
+    hex.textContent = color.toUpperCase();
+  });
+
+  // Auto-spin on load
+  setInterval(() => {
+    idx = (idx + 1) % palette.length;
+    const color = palette[idx];
+    swatch.style.background = color;
+    hex.textContent = color.toUpperCase();
+  }, 2000);
+</script>
+
+</body>
+</html>
